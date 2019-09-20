@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import SearchBar from '../SearchBar';
+import SnippetForm from '../SnippetForm';
 import SnipList from '../SnipList';
 
 export default class Snippets extends Component {
@@ -20,9 +21,7 @@ export default class Snippets extends Component {
   async componentDidMount() {
     console.log('App Mounted');
     // 1. request the data from our server
-    const { data } = await axios.get(
-      'https://maney-snips.herokuapp.com/api/snippets'
-    );
+    const { data } = await axios.get('http://localhost:5000/api/snippets');
     // 2. hold that data in state so that it will be passed down to our Snips
     this.setState({
       snippets: data,
@@ -32,7 +31,7 @@ export default class Snippets extends Component {
   fetchSnippets = async searchText => {
     // fetch snippets from database
     const { data: snippets } = await axios.get(
-      'https://maney-snips.herokuapp.com/api/snippets'
+      'http://localhost:5000/api/snippets'
     );
 
     // inner function for string matching
@@ -53,10 +52,23 @@ export default class Snippets extends Component {
     });
   };
 
+  insertSnippet = async snippet => {
+    console.log(snippet);
+    await axios.post('http://localhost:5000/api/snippets', snippet);
+    const { data: snippets } = await axios.get(
+      'http://localhost:5000/api/snippets'
+    );
+    console.log(snippets);
+    this.setState({
+      snippets,
+    });
+  };
+
   render() {
     return (
       <React.Fragment>
         <SearchBar onSearch={this.fetchSnippets} />
+        <SnippetForm onSubmit={this.insertSnippet} />
         <SnipList snippets={this.state.snippets} />
       </React.Fragment>
     );

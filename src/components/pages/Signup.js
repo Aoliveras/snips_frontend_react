@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-export default class About extends Component {
+export default class Signup extends Component {
   render() {
     return (
       <div>
-        <h1>About Page</h1>
+        <h1>Signup form goes here</h1>
       </div>
     );
   }
